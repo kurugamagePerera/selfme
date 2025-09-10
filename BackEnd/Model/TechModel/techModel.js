@@ -46,4 +46,4 @@ technicianSchema.pre("validate", async function (next) {
 });
 
 // Export the Technician model (changed from "Employee" to match context)
-module.exports = mongoose.model("Test", technicianSchema);
+module.exports = mongoose.model("Testnew", technicianSchema);

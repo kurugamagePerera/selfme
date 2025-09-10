@@ -20,6 +20,9 @@ import ViewTechnicians from "./components/Technician/ViewTechnicians";
 
 import UpdateTechnician from "./components/Technician/UpdateTechnician";
 
+// New OrderReviewer component for read-only view of successful, paid orders
+import OrderReviewerView from "./components/OrderReviewer/OrderReviewerView";
+
 function App() {
   return (
     <div>
@@ -39,7 +42,15 @@ function App() {
         <Route path="/addTechnician" element={<AddTechnician />} />
         <Route path="/viewTechnicians" element={<ViewTechnicians/>}/>
         <Route path="/updateTechnician/:id" element={<UpdateTechnician />} />
+
+
+        {/* New OrderReviewer Route - Read-only view for successful, paid purchase orders
+           Added to display filtered PurchaseOrder data (status: 'success', paid: true)
+           Uses the previously set up OrderReviewerView component */}
+        <Route path="/orderReviewer" element={<OrderReviewerView />} />
+
       </Routes>
+
     </div>
   );
 }
