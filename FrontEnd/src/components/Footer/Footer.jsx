@@ -83,10 +83,10 @@ function Footer() {
           <h4>Contact Us</h4>
           <div className="contact-info">
             <p>
-              <FaMapMarkerAlt /> 123 Solar Street, Colombo, Sri Lanka
+              <FaMapMarkerAlt /> 05 Solar Street, Colombo, Sri Lanka
             </p>
             <p>
-              <FaPhone /> +94 112 345 678
+              <FaPhone /> +94 112 395 888
             </p>
             <p>
               <FaEnvelope /> info@selfme.lk

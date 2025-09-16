@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const itemRoutes = require("./Routes/ItemRoutes");
-const cors = require("cors"); // Add this line
+const employeeRoutes = require("./Routes/TechRoute/employeeRoutes");
+const assignmentRoutes = require("./Routes/TechRoute/assignmentRoutes");
+const cors = require("cors");
 const path = require("path");
 
 
@@ -10,6 +12,8 @@ const path = require("path");
 app.use(cors());
 app.use(express.json());
 app.use("/items", itemRoutes);
+app.use("/employees", employeeRoutes);
+app.use("/assignments", assignmentRoutes);
 
 app.use("/images", express.static(path.join(__dirname, "Item_images")));
 
@@ -19,8 +23,8 @@ mongoose
   )
   .then(() => console.log("Connected to Mongo DB"))
   .then(() => {
-    app.listen(5000);
-    console.log("App listining on port 5000")
+    app.listen(5000, () => {
+      console.log("App listening on port 5000");
+    });
   })
-
   .catch((err) => console.log(err));
