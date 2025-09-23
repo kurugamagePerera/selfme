@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Navbar from "../Nav/Navbar";
-import Footer from "../Footer/Footer";
+//import Navbar from "../Nav/Navbar";
+//import Footer from "../Footer/Footer";
 import "./TechnicianDashboard.css";
 
 function TechnicianLayout({ children }) {
@@ -13,7 +13,8 @@ function TechnicianLayout({ children }) {
 
   return (
     <div>
-      <Navbar />
+      
+      {/* <Navbar /> */}
       <div className="technician-dashboard">
         <div className="dashboard-btn-group">
           <button
@@ -61,7 +62,7 @@ function TechnicianLayout({ children }) {
         </div>
         {children}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 /* Footer Styles */
+
 .footer {
   background-color: #1a3e1f;
   color: #fff;
@@ -111,8 +112,10 @@
 .legal-links a:hover {
   color: #81c784;
 }
+  
 
 /* Responsive Design */
+
 @media (max-width: 768px) {
   .footer-container {
     grid-template-columns: 1fr 1fr;
