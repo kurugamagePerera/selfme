@@ -1,3 +1,4 @@
+// Frontend: RegisteredEmployees.jsx
 import React, { useEffect, useState } from "react";
 import "./TechnicianDashboard.css";
 import TechnicianLayout from "./TechnicianLayout";
@@ -51,6 +52,9 @@ function RegisteredEmployees() {
     if (!form.Employee_Address.trim()) {
       newErrors.Employee_Address = "Address is required";
     }
+    if (/[!#$%]/.test(form.Employee_Address)) {
+      newErrors.Employee_Address = "No special characters !#$%";
+    }
     if (!form.Employee_Dob) {
       newErrors.Employee_Dob = "Date of Birth is required";
     } else if (getAge(form.Employee_Dob) < 18) {
@@ -72,6 +76,9 @@ function RegisteredEmployees() {
         newErrors.hire_date = "Hire date cannot be in the future";
       }
     }
+    if (form.email && !/\S+@\S+\.\S+/.test(form.email)) {
+      newErrors.email = "Invalid email";
+    }
     return newErrors;
   };
 
@@ -83,6 +90,7 @@ function RegisteredEmployees() {
       Employee_Dob: emp.Employee_Dob?.slice(0, 10),
       contact_number: emp.contact_number,
       hire_date: emp.hire_date?.slice(0, 10),
+      email: emp.email,
     });
     setEditErrors({});
   };
@@ -92,6 +100,9 @@ function RegisteredEmployees() {
     let newValue = value;
     if (name === "Employee_name") {
       newValue = value.replace(/[^A-Za-z\s]/g, "");
+    }
+    if (name === "Employee_Address") {
+      newValue = value.replace(/[!#$%]/g, "");
     }
     if (name === "contact_number") {
       newValue = value.replace(/\D/g, "").slice(0, 10);
@@ -137,6 +148,7 @@ function RegisteredEmployees() {
               <th>DOB</th>
               <th>Contact</th>
               <th>Hire Date</th>
+              <th>Email</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -149,6 +161,7 @@ function RegisteredEmployees() {
                 <td>{emp.Employee_Dob?.slice(0, 10)}</td>
                 <td>{emp.contact_number}</td>
                 <td>{emp.hire_date?.slice(0, 10)}</td>
+                <td>{emp.email || "-" }</td>
                 <td>
                   <button
                     className="cta-button"
@@ -183,6 +196,8 @@ function RegisteredEmployees() {
                     value={editForm.Employee_name}
                     onChange={handleEditInput}
                     required
+                    pattern="[A-Za-z\s]+"
+                    title="Only letters and spaces"
                   />
                   {editErrors.Employee_name && (
                     <div className="error-msg">{editErrors.Employee_name}</div>
@@ -226,7 +241,7 @@ function RegisteredEmployees() {
                     maxLength={10}
                     required
                     inputMode="numeric"
-                    pattern="\d*"
+                    pattern="\d{10}"
                   />
                   {editErrors.contact_number && (
                     <div className="error-msg">{editErrors.contact_number}</div>
@@ -244,6 +259,18 @@ function RegisteredEmployees() {
                   />
                   {editErrors.hire_date && (
                     <div className="error-msg">{editErrors.hire_date}</div>
+                  )}
+                </div>
+                <div>
+                  <label>Email:</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={editForm.email}
+                    onChange={handleEditInput}
+                  />
+                  {editErrors.email && (
+                    <div className="error-msg">{editErrors.email}</div>
                   )}
                 </div>
                 <button className="cta-button primary" type="submit">

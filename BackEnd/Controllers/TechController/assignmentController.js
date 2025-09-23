@@ -1,19 +1,21 @@
+// Backend: Controllers/TechController/assignmentController.js
 const PurchaseOrder = require("../../Model/TechModel/purchaseOrderModel");
 const Employee = require("../../Model/TechModel/employeeModel");
 
-// Assign a purchase order to an employee
 exports.assignTask = async (req, res) => {
   try {
     const { employeeId, order } = req.body;
     const now = new Date();
     const deadline = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-
+    if (new Date(order.orderDate) > now) {
+      return res.status(400).json({ error: "Order date cannot be future" });
+    }
     let dbOrder = await PurchaseOrder.findOne({ custom_id: order.id });
 
     if (!dbOrder) {
       dbOrder = await PurchaseOrder.create({
         custom_id: order.id,
-        customerId: order.customerId, // <-- Add this line
+        customerId: order.customerId,
         order_date: order.orderDate,
         total_amount: Number(order.amount.replace(/[^\d.]/g, "")),
         status: "Pending",
@@ -44,7 +46,6 @@ exports.assignTask = async (req, res) => {
   }
 };
 
-// Get all assigned tasks with employee details
 exports.getAssignedTasks = async (req, res) => {
   try {
     const tasks = await PurchaseOrder.find({ assigned_employee: { $ne: null } })
@@ -56,7 +57,6 @@ exports.getAssignedTasks = async (req, res) => {
   }
 };
 
-// Update task status to done
 exports.markTaskDone = async (req, res) => {
   try {
     const task = await PurchaseOrder.findByIdAndUpdate(
@@ -70,7 +70,6 @@ exports.markTaskDone = async (req, res) => {
   }
 };
 
-// Delete an assigned task
 exports.deleteTask = async (req, res) => {
   try {
     const task = await PurchaseOrder.findByIdAndDelete(req.params.id);
@@ -85,7 +84,6 @@ exports.deleteTask = async (req, res) => {
   }
 };
 
-// Update assigned employee for a task
 exports.updateAssignedEmployee = async (req, res) => {
   try {
     const { newEmployeeId } = req.body;
@@ -105,6 +103,42 @@ exports.updateAssignedEmployee = async (req, res) => {
     await task.save();
 
     res.json({ message: "Employee updated successfully", task });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getUnassignedOrders = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, sort = "-created_at", search } = req.query;
+    const query = { assigned_employee: null, paid: true };
+    if (search) {
+      query.$or = [
+        { custom_id: { $regex: search, $options: "i" } },
+        { customerName: { $regex: search, $options: "i" } },
+        { product: { $regex: search, $options: "i" } },
+      ];
+    }
+    const orders = await PurchaseOrder.find(query)
+      .sort(sort)
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+    const count = await PurchaseOrder.countDocuments(query);
+    res.json({ orders, totalPages: Math.ceil(count / limit), currentPage: page });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+exports.getTechStats = async (req, res) => {
+  try {
+    const pendingTasks = await PurchaseOrder.countDocuments({ status: "Pending", assigned_employee: { $ne: null } });
+    const completedTasks = await PurchaseOrder.countDocuments({ status: "Done" });
+    const unassigned = await PurchaseOrder.countDocuments({ assigned_employee: null, paid: true });
+    const overdue = await PurchaseOrder.countDocuments({ deadline: { $lt: new Date() }, status: { $ne: "Done" } });
+    const avgRating = await Employee.aggregate([{ $group: { _id: null, avg: { $avg: "$performance_rating" } } }]);
+    res.json({ pendingTasks, completedTasks, unassigned, overdue, avgRating: avgRating[0]?.avg || 0 });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

@@ -209,3 +209,41 @@
 .orders-table tbody tr:hover {
   background-color: rgba(0, 123, 255, 0.05);
 }
+
+
+
+
+
+
+
+/*new styles*/
+.error-msg {
+  color: red;
+}
+
+.success-msg {
+  color: green;
+}
+
+/* For 60 30 10 rule, perhaps priorities: 60% medium orange, 30% low green, 10% high red */
+.filter-select[ value="High"] {
+  color: red;
+}
+/* etc. */
+
+
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.empty-state h3 { color: #6c757d; }
+.loading { text-align: center; padding: 40px; font-size: 1.2em; }
+.bulk-actions { margin: 20px 0; padding: 15px; background: #f8f8f8; border-radius: 8px; }
+.bulk-actions h3 { margin-bottom: 10px; }
+.stats-container { margin: 20px 0; }
+.recent-activity ul { list-style-type: disc; padding-left: 20px; }
+.recent-activity li { margin-bottom: 5px; }

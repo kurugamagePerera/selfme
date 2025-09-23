@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
@@ -11,6 +12,8 @@ import RegisterEmployee from "./components/TechnicianDashboard/RegisterEmployee"
 import RegisteredEmployees from "./components/TechnicianDashboard/RegisteredEmployees";
 import AssignedTasks from "./components/TechnicianDashboard/AssignedTasks";
 import CompletedTasks from "./components/TechnicianDashboard/CompletedTasks";
+import MaintenanceRequests from "./components/TechnicianDashboard/MaintenanceRequests";
+import JobReports from "./components/TechnicianDashboard/JobReports"; // New
 
 function App() {
   return (
@@ -27,6 +30,8 @@ function App() {
         <Route path="/technicianDashboard/employees" element={<RegisteredEmployees />} />
         <Route path="/technicianDashboard/assigned-tasks" element={<AssignedTasks />} />
         <Route path="/technicianDashboard/completed-tasks" element={<CompletedTasks />} />
+        <Route path="/technicianDashboard/maintenance-requests" element={<MaintenanceRequests />} />
+        <Route path="/technicianDashboard/job-reports" element={<JobReports />} />
       </Routes>
     </div>
   );

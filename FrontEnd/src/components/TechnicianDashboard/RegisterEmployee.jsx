@@ -1,3 +1,4 @@
+// Frontend: RegisterEmployee.jsx
 import React, { useState } from "react";
 import "./TechnicianDashboard.css";
 import TechnicianLayout from "./TechnicianLayout";
@@ -9,8 +10,10 @@ function RegisterEmployee() {
     Employee_Dob: "",
     contact_number: "",
     hire_date: "",
+    email: "",
   });
 
+  const [preview, setPreview] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -33,6 +36,12 @@ function RegisterEmployee() {
     setForm({ ...form, Employee_name: value });
   };
 
+  // Restrict input for address
+  const handleAddressInput = (e) => {
+    const value = e.target.value.replace(/[!#$%]/g, "");
+    setForm({ ...form, Employee_Address: value });
+  };
+
   // Restrict input for contact number (only digits, max 10)
   const handleContactInput = (e) => {
     let value = e.target.value.replace(/\D/g, "");
@@ -40,12 +49,7 @@ function RegisterEmployee() {
     setForm({ ...form, contact_number: value });
   };
 
-  // Restrict input for address (no validation here, but you can add if needed)
-  const handleAddressInput = (e) => {
-    setForm({ ...form, Employee_Address: e.target.value });
-  };
-
-  // Restrict input for hire date and dob
+  // Handle other inputs
   const handleInput = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -62,6 +66,9 @@ function RegisterEmployee() {
     if (!form.Employee_Address.trim()) {
       newErrors.Employee_Address = "Address is required";
     }
+    if (/[!#$%]/.test(form.Employee_Address)) {
+      newErrors.Employee_Address = "No special characters !#$%";
+    }
     if (!form.Employee_Dob) {
       newErrors.Employee_Dob = "Date of Birth is required";
     } else if (getAge(form.Employee_Dob) < 18) {
@@ -75,14 +82,15 @@ function RegisterEmployee() {
     if (!form.hire_date) {
       newErrors.hire_date = "Hire date is required";
     } else {
-      // Check if hire date is in the future
       const hireDate = new Date(form.hire_date);
       const today = new Date();
-      today.setHours(0, 0, 0, 0); // Set to start of day for fair comparison
-
+      today.setHours(0, 0, 0, 0);
       if (hireDate > today) {
         newErrors.hire_date = "Hire date cannot be in the future";
       }
+    }
+    if (form.email && !/\S+@\S+\.\S+/.test(form.email)) {
+      newErrors.email = "Invalid email format";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -102,6 +110,7 @@ function RegisterEmployee() {
       Employee_Dob: "",
       contact_number: "",
       hire_date: "",
+      email: "",
     });
     setSuccess(true);
     setTimeout(() => setSuccess(false), 2000);
@@ -129,6 +138,8 @@ function RegisterEmployee() {
               onChange={handleNameInput}
               required
               autoComplete="off"
+              pattern="[A-Za-z\s]+"
+              title="Only letters and spaces"
             />
             {errors.Employee_name && (
               <div className="error-msg">{errors.Employee_name}</div>
@@ -174,7 +185,7 @@ function RegisterEmployee() {
               required
               autoComplete="off"
               inputMode="numeric"
-              pattern="\d*"
+              pattern="\d{10}"
             />
             {errors.contact_number && (
               <div className="error-msg">{errors.contact_number}</div>
@@ -194,12 +205,36 @@ function RegisterEmployee() {
               <div className="error-msg">{errors.hire_date}</div>
             )}
           </div>
+          <div>
+            <label>Email (Optional):</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleInput}
+            />
+            {errors.email && (
+              <div className="error-msg">{errors.email}</div>
+            )}
+          </div>
+          <button type="button" onClick={() => setPreview(true)} className="cta-button">
+            Preview
+          </button>
           <button className="cta-button primary" type="submit">
             Register
           </button>
         </form>
         {success && (
           <div className="success-msg">Employee registered successfully!</div>
+        )}
+        {preview && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Preview</h3>
+              {/* Preview fields */}
+              <button onClick={() => setPreview(false)}>Close</button>
+            </div>
+          </div>
         )}
       </div>
     </TechnicianLayout>
