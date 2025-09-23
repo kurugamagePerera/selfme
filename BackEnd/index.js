@@ -7,6 +7,9 @@ const employeeRoutes = require("./Routes/TechRoute/employeeRoutes");
 const assignmentRoutes = require("./Routes/TechRoute/assignmentRoutes");
 const maintainRoutes = require("./Routes/TechRoute/maintainRoutes"); // New
 const jobReportRoutes = require("./Routes/TechRoute/jobReportRoutes"); // New
+const purchaseOrderRoutes = require("./Routes/TechRoute/purchaseOrderRoutes");//New
+
+
 const cors = require("cors");
 const path = require("path");
 
@@ -18,6 +21,7 @@ app.use("/employees", employeeRoutes);
 app.use("/assignments", assignmentRoutes);
 app.use("/maintenances", maintainRoutes);
 app.use("/jobreports", jobReportRoutes);
+app.use("/purchase-orders", purchaseOrderRoutes);
 
 app.use("/images", express.static(path.join(__dirname, "Item_images")));
 

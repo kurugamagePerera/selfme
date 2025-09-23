@@ -1,4 +1,4 @@
-// Backend: Model/TechModel/purchaseOrderModel.js
+// BackEnd/Model/TechModel/purchaseOrderModel.js
 const mongoose = require("mongoose");
 const JobHistory = require("./jobHistoryModel"); // New model
 
